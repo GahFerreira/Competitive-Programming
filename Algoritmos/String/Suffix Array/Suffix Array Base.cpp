@@ -47,68 +47,71 @@ vector<int> gerar_suffix_array(string s)
     int tam_s = (int) s.size();
     vector<int> suffix_array(tam_s), classes_de_equivalencia(tam_s);
 
-    // i_vetor_temp = 0
+
     {
         vector<pair<char, int>> p(tam_s);   // Possui a primeira letra de cada sufixo
 
+
         for (int i = 0; i < tam_s; i++) p[i] = {s[i], i};
 
+
         sort(p.begin(), p.end());
+
 
         classes_de_equivalencia[ p[0].second ] = 0;
         for (int i = 1; i < tam_s; i++)
         {
             if (p[i].first == p[i-1].first) classes_de_equivalencia[p[i].second] = classes_de_equivalencia[p[i-1].second];
 
+
             else classes_de_equivalencia[p[i].second] = classes_de_equivalencia[p[i-1].second] + 1;
         }
+
 
         for (int i = 0; i < tam_s; i++) suffix_array[i] = p[i].second;
     }
     
     int i_vetor_temp = 0;
 
-    // i_vetor_temp -> i_vetor_temp+1
 
-    // Antes de entrar no while meu i_vetor_temp é igual a 0
-    // Se o tamanho dos sufixos já calculados (1 << i_vetor_temp) == (2 ^ i_vetor_temp) for igual ou maior que tam_s...
-    // ... então já calculei todos os sufixos de tamanho pelo menos tam_s, que é suficiente para eu saber todos os sufixos de s
-    // Eu entro no while se eu quiser tornar meu i_vetor_temp -> i_vetor_temp+1
     while ((1 << i_vetor_temp) < tam_s)
     {
-        // 'p' possui as classes de equivalência de cada sufixo intermediário de s
-        // e seu índice
         vector<pair<pair<int, int>, int>> p(tam_s);
+
 
         for (int i = 0; i < tam_s; i++) 
             p[i] = {{classes_de_equivalencia[i], classes_de_equivalencia[(i + (1 << i_vetor_temp))%tam_s]}, i};
 
+
         sort(p.begin(), p.end());
 
+
         classes_de_equivalencia[ p[0].second ] = 0;
+
 
         for (int i = 1; i < tam_s; i++)
         {
             if (p[i].first == p[i-1].first) classes_de_equivalencia[p[i].second] = classes_de_equivalencia[p[i-1].second];
 
+
             else classes_de_equivalencia[p[i].second] = classes_de_equivalencia[p[i-1].second] + 1;
         }
 
-        // A atribuição para o suffix array pode ser feita antes ou depois de calcular as classes de equivalência
+
         for (int i = 0; i < tam_s; i++) suffix_array[i] = p[i].second;
 
-        // Melhoria!
-        // Se em uma iteração, a minha maior classe de equivalência for igual a tam_s - 1, ...
-        // ... como as classes de equivalência se iniciam em 0, isso significa que todas são distintas.
-        // Dessa forma, todos os meus sufixos intermediários já estão completamente ordenados!
-        // Aumentar i_vetor_temp só ajuda a distinguir sufixos intermediários iguais, então posso apenas retornar suffix_array.
+
+        // Checa para ver se já finalizou
         if (classes_de_equivalencia[p[tam_s - 1].second] == tam_s - 1) break;
+
 
         i_vetor_temp++;
     }
 
+
     return suffix_array;
 }
+
 
 int main()
 {

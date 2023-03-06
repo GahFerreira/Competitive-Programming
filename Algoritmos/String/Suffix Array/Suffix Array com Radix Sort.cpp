@@ -180,7 +180,7 @@ int main()
 
     vector<int> suffix_array = gerar_suffix_array(s);
 
-    for (int i = 0; i < (int) suffix_array.size(); i++) cout << suffix_array[i] << " ";
+    for (int i = 0; i < (int) suffix_array.size(); i++) cout << s.substr(suffix_array[i]) << " ";
 
     return 0;
 }
