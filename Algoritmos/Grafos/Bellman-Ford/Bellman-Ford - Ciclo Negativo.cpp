@@ -12,20 +12,17 @@ using namespace std;
 typedef long long ll;
 
 // `gar`: Grafo de ARestas.
-vector<int> bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
+bool bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 {
-    // `descoberto` garante que `dist` vai ter a menor distância entre ini e o resto.
-    // Ex.: n_vertices = 3, ini = 1, gar = { {2, 3, -1} }.
     vector<int> dist(n_vertices+1, INF);
     vector<bool> descoberto(n_vertices+1, false);
 
     dist[ini] = 0;
     descoberto[ini] = true;
 
-    /// for (;;) // Na variante com `relaxou`.
+    // Não há otimização `relaxou` para ciclo negativo.
     for (int passo = 1; passo <= n_vertices-1; passo++)
     {
-        /// bool relaxou = false; // Otimização
         for (auto& ar : gar)
         {
             int a, b, w;
@@ -35,13 +32,22 @@ vector<int> bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 
             if (dist[a] + w < dist[b])
             {
-                /// relaxou = true;
                 if (!descoberto[b]) descoberto[b] = true;
                 dist[b] = dist[a] + w;
             }
         }
-        /// if (!relaxou) break;
     }
 
-    return dist;
+    for (auto& ar : gar)
+    {
+        int a, b, w;
+        tie(a, b, w) = ar;
+
+        if (dist[a] + w < dist[b])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

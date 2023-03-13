@@ -20,9 +20,12 @@ ll BMF(vector<tuple<ll, ll, ll>> gar, ll ini, ll ult, ll n)
     descoberto[ini] = true;
 
     // Funciona com `passo <= n`, com certeza, mas passa com `<= n-1` também.
-    for (ll passo = 1; passo <= n-1; passo++)
+    //for (ll passo = 1; passo <= n-1; passo++)
+    for (;;)    // Funciona otimizando também!
     {
-        for (auto ar : gar)
+        bool relaxou = false;
+
+        for (auto& ar : gar)
         {
             ll a, b, w;
             tie(a, b, w) = ar;
@@ -37,8 +40,12 @@ ll BMF(vector<tuple<ll, ll, ll>> gar, ll ini, ll ult, ll n)
 
                 min_t[b] = min(min_t[a], w);
                 prev[b] = a;
+
+                relaxou = true;
             }
         }
+
+        if (!relaxou) break;
     }
 
     ll ret = INF;

@@ -1,6 +1,4 @@
-// Obj.: Descobrir a dist. entre vértice ini e os outros.
-// Obj.: Descobrir se há ciclo negativo.
-// Compl.: O(va), v = |vértices|, a = |arestas|
+// onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=499
 
 #include <bits/stdc++.h>
 
@@ -12,20 +10,16 @@ using namespace std;
 typedef long long ll;
 
 // `gar`: Grafo de ARestas.
-vector<int> bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
+bool bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 {
-    // `descoberto` garante que `dist` vai ter a menor distância entre ini e o resto.
-    // Ex.: n_vertices = 3, ini = 1, gar = { {2, 3, -1} }.
     vector<int> dist(n_vertices+1, INF);
     vector<bool> descoberto(n_vertices+1, false);
 
     dist[ini] = 0;
     descoberto[ini] = true;
 
-    /// for (;;) // Na variante com `relaxou`.
     for (int passo = 1; passo <= n_vertices-1; passo++)
     {
-        /// bool relaxou = false; // Otimização
         for (auto& ar : gar)
         {
             int a, b, w;
@@ -35,13 +29,44 @@ vector<int> bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 
             if (dist[a] + w < dist[b])
             {
-                /// relaxou = true;
                 if (!descoberto[b]) descoberto[b] = true;
                 dist[b] = dist[a] + w;
             }
         }
-        /// if (!relaxou) break;
     }
 
-    return dist;
+    for (auto& ar : gar)
+    {
+        int a, b, w;
+        tie(a, b, w) = ar;
+
+        if (dist[a] + w < dist[b])
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int main()
+{
+    int tt;
+    cin >> tt;
+    while(tt--)
+    {
+        int n, m;
+        cin >> n >> m;
+        vector<tuple<int, int, int>> gar;
+        for (int i = 0; i < m; i++)
+        {
+            int a, b, w;
+            cin >> a >> b >> w;
+            gar.push_back({a, b, w});
+        }
+        if (bmf(gar, 0, n)) cout << "possible\n";
+        else cout << "not possible\n";
+    }
+
+    return 0;
 }

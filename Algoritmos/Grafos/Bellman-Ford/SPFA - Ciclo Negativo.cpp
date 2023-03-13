@@ -8,19 +8,21 @@ using namespace std;
 typedef long long ll;
 
 // `gar`: Grafo de ARestas.
-vector<int> spfa(vector<vector<pair<int, int>>>& g, int ini, int n_vertices)
+bool spfa(vector<vector<pair<int, int>>>& g, int ini, int n_vertices)
 {
-    vector<int> dist(n_vertices+1, INF);
+    vector<int> dist(n_vertices, INF);
+    vector<int> relax(n_vertices, 0);
     queue<int> q;
-    ///vector<bool> na_fila(n_vertices+1, false); // Otimização
+    ///vector<bool> na_fila(n_vertices, false); // Otimização
+    bool ha_ciclo_negativo = false;
 
     dist[ini] = 0;
     q.push(ini);
     ///na_fila[ini] = true;
 
-    while (!q.empty())
+    while (!q.empty() and !ha_ciclo_negativo)
     {
-        int at = q.front(); q.pop(); 
+        int at = q.front(); q.pop();
         ///na_fila[at] = false;
 
         for (auto& ar : g[at])
@@ -32,9 +34,16 @@ vector<int> spfa(vector<vector<pair<int, int>>>& g, int ini, int n_vertices)
                 dist[viz] = dist[at] + w;
                 ///if (!na_fila[viz]) 
                 q.push(viz);
+
+                ++relax[viz];
+                if (relax[viz] >= n_vertices) 
+                {
+                    ha_ciclo_negativo = true;
+                    break;
+                }
             }
         }
     }
 
-    return dist;
+    return ha_ciclo_negativo;
 }

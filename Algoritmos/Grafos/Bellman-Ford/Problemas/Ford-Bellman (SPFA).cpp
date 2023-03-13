@@ -14,13 +14,16 @@ vector<int> spfa(vector<vector<pair<int, int>>>& g, int ini, int n_vertices)
 {
     vector<int> dist(n_vertices+1, INF);
     queue<int> q;
+    vector<bool> na_fila(n_vertices+1, false);
 
     dist[ini] = 0;
     q.push(ini);
+    na_fila[ini] = true;
 
     while (!q.empty())
     {
-        int at = q.front(); q.pop();
+        int at = q.front(); q.pop(); 
+        na_fila[at] = false;
 
         for (auto& ar : g[at])
         {
@@ -29,7 +32,7 @@ vector<int> spfa(vector<vector<pair<int, int>>>& g, int ini, int n_vertices)
             if (dist[at] + w < dist[viz])
             {
                 dist[viz] = dist[at] + w;
-                q.push(viz);
+                if (!na_fila[viz]) q.push(viz);
             }
         }
     }
