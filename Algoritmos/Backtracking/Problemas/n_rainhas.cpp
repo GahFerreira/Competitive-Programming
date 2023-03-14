@@ -1,4 +1,6 @@
 // leetcode.com/problems/n-queens/
+// Possível otimização: uma vez que a 1ª rainha passar da metade do tabuleiro
+// basta espelhar as soluções encontradas.
 
 #include <bits/stdc++.h>
 using namespace std;
