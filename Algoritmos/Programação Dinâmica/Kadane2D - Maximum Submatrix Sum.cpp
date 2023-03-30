@@ -1,56 +1,53 @@
 /*
-Objetivo: encontrar a submatriz contígua de matriz com maior soma.
-Compl.: O(c²l) para  l = |linhas|, c = |colunas|.
+Entrada: Uma matriz de inteiros 2-dimensional, com dimensões c, l.
+Saída: A maior soma entre todos os sub-retângulos da matriz.
+Compl.: O(c²l), l = |linhas|, c = |colunas|, c <= l.
 */
 
 #include <bits/stdc++.h>
 
 using namespace std;
 
-// Suporte
-int maximum_subarray_sum(vector<int>& vetor)
-{
-    // Se subarray não vazia, inicia com vetor[0] e começa o for do 1.
-    int soma = 0, melhor = 0;
-
-    for (int i = 0; i < (int) vetor.size(); i++)
-    {
-        // Vai somando os números da array.
-        // Quando encontrar um número cujo valor seja maior que a soma atual + ele,
-        // é melhor escolher ele sozinho para compor uma nova subarray de maior soma.
-        soma = max(soma + vetor[i], vetor[i]);
-
-        if (soma > melhor) melhor = soma;
-    }
-
-    return melhor;
-}
-
 // Soma máxima de submatriz
 int kadane2d(vector<vector<int>>& matriz)
 {
     int n_lin = (int) matriz.size(), n_col = (int) matriz[0].size();
 
-    // Se for submatriz não vazia, inicia com matriz[0][0].
-    int melhor = 0;
-
-    for (int col_inicial = 0; col_inicial < n_col; col_inicial++)
+    // Se puder submatriz vazia, inicia com 0.
+    int melhor = matriz[0][0];
+ 
+    for (int col_ini = 0; col_ini < n_col; col_ini++)
     {
         vector<int> soma_linhas(n_lin, 0);
 
-        for (int col_final = col_inicial; col_final < n_col; col_final++)
+        for (int col_ult = col_ini; col_ult < n_col; col_ult++)
         {
             for (int i_lin = 0; i_lin < n_lin; i_lin++)
             {
-                // Cada posição de `soma_linha` é a soma de matriz[i_lin][col_inicial:col_final]
-                soma_linhas[i_lin] += matriz[i_lin][col_final];
+                // Cada posição de `soma_linha` é a soma de matriz[i_lin][col_ini:col_ult]
+                soma_linhas[i_lin] += matriz[i_lin][col_ult];
             }
 
-            // A resposta será a maior soma entre as submatrizes de matriz[:][col_inicial:col_final]
-            int maior_soma = maximum_subarray_sum(soma_linhas);
+            // A resposta será a maior soma entre as submatrizes de matriz[:][col_ini:col_ult]
+            int maior_soma = kadane(soma_linhas);
 
             if (maior_soma > melhor) melhor = maior_soma;
         }
+    }
+
+    return melhor;
+}
+
+// Suporte
+int kadane(vector<int>& vetor)
+{
+    int soma = vetor[0], melhor = vetor[0];
+
+    for (int i = 1; i < (int) vetor.size(); i++)
+    {
+        soma = max(soma + vetor[i], vetor[i]);  
+
+        if (soma > melhor) melhor = soma;
     }
 
     return melhor;

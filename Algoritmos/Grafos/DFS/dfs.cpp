@@ -2,7 +2,6 @@
 using namespace std;
 
 #define MAX_N 10000
-#define INF
 
 vector<int> adj[MAX_N];
 vector<bool> percorrido(MAX_N, false);

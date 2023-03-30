@@ -4,8 +4,11 @@ Obj.: Calcular a função Ack:
                      A(m-1, 1)         se m > 0 e n = 0
                      A(m-1, A(m, n-1)) se m > 0 e n > 0
                   }
-
 Compl.: O(1)
+Restr.: `fun` é muito lerda para:
+         N = 4, M >= 3
+         N = 5, M >= 1 (Estoura recursão)
+         N >= 6, M >= 0 (Estoura recursão)
 '''
 
 def fun(M, N):

@@ -1,4 +1,14 @@
+# Arquivos Internos
 **/*.exe
 **/.vscode
-**/*.in
-**/*.out
+
+# Entrada e Saída
+**/*.ipt
+**/*.opt
+
+# Pastas de Teste
+**/Teste
+
+# Arquivos Temporariamente em .gitignore
+**/2022
+**/Algoritmos/Matemática
