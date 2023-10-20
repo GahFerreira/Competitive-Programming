@@ -11,4 +11,4 @@
 
 # Arquivos Temporariamente em .gitignore
 **/2022
-**/Algoritmos/Matemática
+**/Matemática/**
