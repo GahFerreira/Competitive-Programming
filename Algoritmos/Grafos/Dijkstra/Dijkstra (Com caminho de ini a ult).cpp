@@ -5,6 +5,8 @@ typedef long long ll;
 
 #define INF 1000000000000000000
 
+vector<int> caminho;
+
 void dijkstra(vector<vector<pair<int, ll>>>& g, int ini, int ult)
 {
     priority_queue<pair<ll, int>> q;
@@ -34,5 +36,25 @@ void dijkstra(vector<vector<pair<int, ll>>>& g, int ini, int ult)
                 prev[b] = at;
             }
         }
+    }
+
+    // Constrói caminho de ini a ult
+    if (dist[ult] == INF)
+    {
+        caminho.push_back(-1);
+    }
+
+    else
+    {
+        int b = ult;
+        while (b != ini)
+        {
+            caminho.push_back(b);
+            b = prev[b];
+        }
+
+        caminho.push_back(ini);
+
+        reverse(caminho.begin(), caminho.end());
     }
 }

@@ -15,12 +15,9 @@ typedef long long ll;
 bool bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 {
     vector<int> dist(n_vertices+1, INF);
-    vector<bool> descoberto(n_vertices+1, false);
 
     dist[ini] = 0;
-    descoberto[ini] = true;
 
-    // Não há otimização `relaxou` para ciclo negativo.
     for (int passo = 1; passo <= n_vertices-1; passo++)
     {
         for (auto& ar : gar)
@@ -28,11 +25,11 @@ bool bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
             int a, b, w;
             tie(a, b, w) = ar;
 
-            if (!descoberto[a]) continue;
+            // Ainda não foi encontrado caminho de 'ini' para 'a'.
+            if (dist[a] == INF) continue;
 
             if (dist[a] + w < dist[b])
             {
-                if (!descoberto[b]) descoberto[b] = true;
                 dist[b] = dist[a] + w;
             }
         }
@@ -43,10 +40,10 @@ bool bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
         int a, b, w;
         tie(a, b, w) = ar;
 
-        if (dist[a] + w < dist[b])
-        {
-            return true;
-        }
+        // Não existe caminho de 'ini' para 'a'.
+        if (dist[a] == INF) continue;
+
+        if (dist[a] + w < dist[b]) return true;
     }
 
     return false;

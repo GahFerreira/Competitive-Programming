@@ -13,14 +13,10 @@ typedef long long ll;
 ll BMF(vector<tuple<ll, ll, ll>> gar, ll ini, ll ult, ll n)
 {
     vector<ll> min_t(n+1, -1);
-    vector<bool> descoberto(n+1, false);
     vector<ll> prev(n+1, -1);
 
     min_t[ini] = INF;
-    descoberto[ini] = true;
 
-    // Funciona com `passo <= n`, com certeza, mas passa com `<= n-1` também.
-    //for (ll passo = 1; passo <= n-1; passo++)
     for (;;)    // Funciona otimizando também!
     {
         bool relaxou = false;
@@ -30,14 +26,12 @@ ll BMF(vector<tuple<ll, ll, ll>> gar, ll ini, ll ult, ll n)
             ll a, b, w;
             tie(a, b, w) = ar;
 
-            if (!descoberto[a]) continue;
+            if (min_t[a] == -1) continue;
 
             // Para cada vértice `a` já descoberto, você oferece ao vizinho `b` o menor
             // entre: a qtd de turistas até `a` e a qtd de turistas de `a` a `b`.
             if (min_t[b] < min(min_t[a], w))
             {
-                if (!descoberto[b]) descoberto[b] = true;
-
                 min_t[b] = min(min_t[a], w);
                 prev[b] = a;
 

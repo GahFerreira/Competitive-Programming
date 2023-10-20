@@ -1,6 +1,7 @@
 // Obj.: Descobrir a dist. entre vértice ini e os outros.
 // Obj.: Descobrir se há ciclo negativo.
 // Compl.: O(va), v = |vértices|, a = |arestas|
+// Otimização: pode-se parar o algoritmo quando não relaxar nenhuma vez durante o `for` externo.
 
 #include <bits/stdc++.h>
 
@@ -12,36 +13,26 @@ using namespace std;
 typedef long long ll;
 
 // `gar`: Grafo de ARestas.
-vector<int> bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
+void bmf(vector<tuple<int, int, int>>& gar, int ini, int n_vertices)
 {
-    // `descoberto` garante que `dist` vai ter a menor distância entre ini e o resto.
-    // Ex.: n_vertices = 3, ini = 1, gar = { {2, 3, -1} }.
     vector<int> dist(n_vertices+1, INF);
-    vector<bool> descoberto(n_vertices+1, false);
-
     dist[ini] = 0;
-    descoberto[ini] = true;
 
-    /// for (;;) // Na variante com `relaxou`.
     for (int passo = 1; passo <= n_vertices-1; passo++)
     {
-        /// bool relaxou = false; // Otimização
         for (auto& ar : gar)
         {
             int a, b, w;
             tie(a, b, w) = ar;
 
-            if (!descoberto[a]) continue;
+            // Ainda não foi encontrado caminho de 'ini' para 'a'.
+            // Útil para o caso especial: ini = 1, |v| = 3, a = {(2, 3, -1)}.
+            if (dist[a] == INF) continue;
 
             if (dist[a] + w < dist[b])
             {
-                /// relaxou = true;
-                if (!descoberto[b]) descoberto[b] = true;
                 dist[b] = dist[a] + w;
             }
         }
-        /// if (!relaxou) break;
     }
-
-    return dist;
 }
